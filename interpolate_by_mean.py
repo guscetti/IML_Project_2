@@ -3,9 +3,9 @@ import pandas as pd
 
 
 
-data_mata = pd.read_csv("train.csv")
 
-def interpolate_x_and_y(data, johresziit):
+def interpolate_x_and_y(johresziit):
+    data = pd.read_csv("train.csv")
     data_season = data[data['season'] == johresziit]
     data_season = data_season.drop(columns=["season"])
     for spaltenname in data_season.columns:
@@ -16,7 +16,8 @@ def interpolate_x_and_y(data, johresziit):
     return data_season
 
 
-def interpolate_x(data, johresziit):
+def interpolate_x(johresziit):
+    data = pd.read_csv("train.csv")
     data_season = data[data['season'] == johresziit]
     data_season = data_season.drop(columns=["season"])
 
@@ -35,20 +36,20 @@ def interpolate_x(data, johresziit):
 
 
 #split the interpolated data frames into numpy array of X and y
-def x_to_np(data, season, interp):
+def x_to_np(season, interp):
     if interp == 'only_x':
-        prices_season = interpolate_x(data, season)
+        prices_season = interpolate_x(season)
     elif interp == 'x_and_y':
-        prices_season = interpolate_x_and_y(data, season)
+        prices_season = interpolate_x_and_y(season)
     data = prices_season.drop(columns=('price_CHF'))
     X = data.to_numpy()
     return X
 
-def y_to_np(data, season, interp):
+def y_to_np(season, interp):
     if interp == 'only_x':
-        prices_season = interpolate_x(data, season)
+        prices_season = interpolate_x(season)
     elif interp == 'x_and_y':
-        prices_season = interpolate_x_and_y(data, season)
+        prices_season = interpolate_x_and_y(season)
     y = prices_season["price_CHF"].to_numpy()
     return y
 
